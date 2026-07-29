@@ -1,108 +1,236 @@
-# Genspark Project
-Hello this is Feature 2 Branch
-# Project Title
+# SDLC & Python Foundations Project
 
 ## Project Description
 
-This project is a web application developed to demonstrate the implementation of modern software development practices, including requirement analysis, design, development, testing, version control, and deployment.
+This project demonstrates the application of Software Development Lifecycle (SDLC) principles and Python programming fundamentals to develop a software solution following a professional development process.
 
-The purpose of this project is to provide users with an efficient and user-friendly solution while applying software engineering principles such as clean code structure, teamwork, and Git-based collaboration.
+The project covers the complete software development journey, including requirement analysis, system design, implementation, testing, documentation, and version control using Git and GitHub.
 
----
-
-# Features
-
-- User-friendly interface and responsive design
-- Secure user authentication and account management
-- Data management and storage functionality
-- Interactive user experience
-- CRUD operations (Create, Read, Update, Delete)
-- Error handling and validation
-- Version control using Git and GitHub
-- Modular and maintainable code structure
+The purpose of this project is to build practical software development skills by combining software engineering practices with Python programming concepts.
 
 ---
 
-# Folder Structure
+# Project Objectives
 
-```
-Project-Name/
+The main objectives of this project are:
+
+- Understand the Software Development Lifecycle (SDLC) phases
+- Apply requirement gathering and system design techniques
+- Practice Git and GitHub version control workflows
+- Develop applications using Python programming
+- Apply programming concepts including:
+  - Variables and data types
+  - Input and output
+  - Control flow
+  - Functions
+  - Data structures
+  - File handling
+  - Object-Oriented Programming (OOP)
+  - Error handling
+  - Testing practices
+
+---
+
+# Key Features
+
+## Software Development Practices
+
+- Requirement analysis and documentation
+- System design and planning
+- Modular code development
+- Version control using Git
+- GitHub repository management
+- Testing and debugging
+- Code documentation
+
+## Python Development
+
+- Python scripting
+- Data processing
+- User input handling
+- Conditional statements and loops
+- Functions and reusable components
+- Collections and data modelling
+- File input/output
+- Exception handling
+- Object-oriented programming
+- Unit testing
+
+---
+
+# SDLC Methodology Applied
+
+This project follows the main phases of the Software Development Lifecycle:
+
+## 1. Planning & Requirement Analysis
+
+Activities:
+
+- Identify project goals and requirements
+- Analyse user needs
+- Define system functionality
+- Create requirement documentation
+
+---
+
+## 2. System Design
+
+Activities:
+
+- Design system structure
+- Create workflows and diagrams
+- Plan data models
+- Define application architecture
+
+---
+
+## 3. Development
+
+Activities:
+
+- Implement Python solutions
+- Apply programming fundamentals
+- Create reusable functions
+- Develop classes and objects using OOP principles
+
+---
+
+## 4. Testing
+
+Activities:
+
+- Create test cases
+- Validate program functionality
+- Handle errors and exceptions
+- Perform unit testing
+- Improve code quality
+
+---
+
+## 5. Deployment & Maintenance
+
+Activities:
+
+- Prepare project documentation
+- Manage source code repository
+- Review and improve implementation
+- Maintain project versions
+
+---
+
+# Project Structure
+SDLC-Python-Project/
 │
-├── src/                    # Main source code
-│   ├── components/         # Reusable components
-│   ├── pages/              # Application pages
-│   ├── services/           # API and business logic
-│   └── assets/             # Images, styles, and resources
+├── src/
+│ ├── main.py # Main application code
+│ ├── modules/ # Reusable Python modules
+│ └── models/ # Data models and classes
 │
-├── public/                 # Public files
+├── tests/
+│ └── test_main.py # Unit tests
 │
-├── database/               # Database scripts and configuration
+├── docs/
+│ ├── requirements.md # Requirements documentation
+│ └── design.md # System design documentation
 │
-├── tests/                  # Testing files
+├── data/
+│ └── data.json # Application data storage
 │
-├── docs/                   # Documentation files
+├── README.md
 │
-├── README.md               # Project documentation
-├── package.json            # Project dependencies and scripts
-└── .gitignore              # Ignored files for Git
-```
+└── .gitignore
+
 
 ---
 
 # Technologies Used
 
-## Frontend
-- HTML5
-- CSS3
-- JavaScript
-- React.js *(if applicable)*
+## Programming Language
 
-## Backend
-- Node.js
-- Express.js *(if applicable)*
-
-## Database
-- MongoDB / MySQL *(replace with your database)*
+- Python 3
 
 ## Development Tools
+
+- Visual Studio Code
+- Jupyter Notebook
+- Terminal
+
+## Version Control
+
 - Git
 - GitHub
-- Visual Studio Code
-- Postman *(if applicable)*
+
+## Testing
+
+- Python Unit Testing Framework
+
+---
+
+# Skills Demonstrated
+
+## Software Engineering
+
+- SDLC understanding
+- Requirement gathering
+- System design
+- Software testing
+- Documentation
+- Version control workflow
+
+## Python Programming
+
+- Python syntax
+- Variables and data types
+- Control flow
+- Functions
+- Data structures
+- File handling
+- Object-Oriented Programming
+- Exception handling
+
+## Professional Development Practices
+
+- Clean code principles
+- Modular programming
+- Debugging techniques
+- Code review process
+- GitHub collaboration
 
 ---
 
 # Version History
 
 | Version | Date | Description |
-|--------|------|-------------|
-| v1.0.0 | July 2026 | Initial project release |
-| v1.1.0 | July 2026 | Added additional features and improvements |
-| v2.0.0 | July 2026 | Major update and system enhancement |
+|---------|------|-------------|
+| v1.0.0 | July 2026 | Initial project setup and Python implementation |
+| v1.1.0 | July 2026 | Added programming features and improvements |
+| v2.0.0 | July 2026 | Added advanced Python concepts, testing, and documentation |
 
 ---
 
-# GitHub Repository Link
+# GitHub Repository
 
 The complete source code is available on GitHub:
 
-https://github.com/your-username/your-project-name
+https://github.com/tiennguyenit/genspark.git
 
 ---
 
 # Author Information
 
-**Author:** Your Name  
-**Course/Organisation:** Your Course Name  
-**Role:** Software Developer  
+**Author:** Tien Nguyen  
+**Course:** SDLC & Python Foundations  
+**Role:** Software Developer
 
 ## Contact Information
 
-- GitHub: https://github.com/tiennguyenit/genspark
+- GitHub: https://github.com/tiennguyenit
 - Email: tienng39@gmail.com
 
 ---
 
 # Acknowledgements
 
-Special thanks to everyone who contributed to the development, testing, and improvement of this project.
+Special thanks to the SDLC & Python Foundations training program for providing guidance and resources throughout this project.
+
+This project represents the application of software engineering principles and Python programming skills to create a structured and maintainable software solution.
