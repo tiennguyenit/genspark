@@ -118,31 +118,6 @@ Activities:
 
 ---
 
-# Project Structure
-SDLC-Python-Project/
-│
-├── src/
-│ ├── main.py # Main application code
-│ ├── modules/ # Reusable Python modules
-│ └── models/ # Data models and classes
-│
-├── tests/
-│ └── test_main.py # Unit tests
-│
-├── docs/
-│ ├── requirements.md # Requirements documentation
-│ └── design.md # System design documentation
-│
-├── data/
-│ └── data.json # Application data storage
-│
-├── README.md
-│
-└── .gitignore
-
-
----
-
 # Technologies Used
 
 ## Programming Language
