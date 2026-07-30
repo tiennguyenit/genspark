@@ -1,1 +1,23 @@
+# macOS files
 .DS_Store
+
+# Microsoft Word temporary files
+~$*.docx
+
+# Compressed files
+*.zip
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# IDE settings
+.vscode/
+.idea/.DS_Store
