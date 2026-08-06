@@ -1,18 +1,16 @@
-# SDLC & Python Foundations Project
+# SDLC & Python Foundations Course
 
-## Project Description
+## Course Description
 
-This project demonstrates the application of Software Development Lifecycle (SDLC) principles and Python programming fundamentals to develop a software solution following a professional development process.
+This course demonstrates the application of Software Development Lifecycle (SDLC) principles and Python programming fundamentals to develop a software solution following a professional development process.
 
-The project covers the complete software development journey, including requirement analysis, system design, implementation, testing, documentation, and version control using Git and GitHub.
+The course covers the complete software development journey, including requirement analysis, system design, implementation, testing, documentation, and version control using Git and GitHub.
 
-The purpose of this project is to build practical software development skills by combining software engineering practices with Python programming concepts.
+The purpose of this course is to build practical software development skills by combining software engineering practices with Python programming concepts.
 
 ---
 
-# Project Objectives
-
-The main objectives of this project are:
+# Course Objectives
 
 - Understand the Software Development Lifecycle (SDLC) phases
 - Apply requirement gathering and system design techniques
@@ -33,28 +31,8 @@ The main objectives of this project are:
 
 # Key Features
 
-## Software Development Practices
-
-- Requirement analysis and documentation
-- System design and planning
-- Modular code development
-- Version control using Git
-- GitHub repository management
-- Testing and debugging
-- Code documentation
-
-## Python Development
-
-- Python scripting
-- Data processing
-- User input handling
-- Conditional statements and loops
-- Functions and reusable components
-- Collections and data modelling
-- File input/output
-- Exception handling
-- Object-oriented programming
-- Unit testing
+- Software Development Practices
+- Python Development
 
 ---
 
@@ -62,59 +40,11 @@ The main objectives of this project are:
 
 This project follows the main phases of the Software Development Lifecycle:
 
-## 1. Planning & Requirement Analysis
-
-Activities:
-
-- Identify project goals and requirements
-- Analyse user needs
-- Define system functionality
-- Create requirement documentation
-
----
-
-## 2. System Design
-
-Activities:
-
-- Design system structure
-- Create workflows and diagrams
-- Plan data models
-- Define application architecture
-
----
-
-## 3. Development
-
-Activities:
-
-- Implement Python solutions
-- Apply programming fundamentals
-- Create reusable functions
-- Develop classes and objects using OOP principles
-
----
-
-## 4. Testing
-
-Activities:
-
-- Create test cases
-- Validate program functionality
-- Handle errors and exceptions
-- Perform unit testing
-- Improve code quality
-
----
-
-## 5. Deployment & Maintenance
-
-Activities:
-
-- Prepare project documentation
-- Manage source code repository
-- Review and improve implementation
-- Maintain project versions
+1. Planning & Requirement Analysis
+2. System Design
+3. Development
+4. Testing
+5. Deployment & Maintenance
 
 ---
 
@@ -134,52 +64,6 @@ Activities:
 
 - Git
 - GitHub
-
-## Testing
-
-- Python Unit Testing Framework
-
----
-
-# Skills Demonstrated
-
-## Software Engineering
-
-- SDLC understanding
-- Requirement gathering
-- System design
-- Software testing
-- Documentation
-- Version control workflow
-
-## Python Programming
-
-- Python syntax
-- Variables and data types
-- Control flow
-- Functions
-- Data structures
-- File handling
-- Object-Oriented Programming
-- Exception handling
-
-## Professional Development Practices
-
-- Clean code principles
-- Modular programming
-- Debugging techniques
-- Code review process
-- GitHub collaboration
-
----
-
-# Version History
-
-| Version | Date | Description |
-|---------|------|-------------|
-| v1.0.0 | July 2026 | Initial project setup and Python implementation |
-| v1.1.0 | July 2026 | Added programming features and improvements |
-| v2.0.0 | July 2026 | Added advanced Python concepts, testing, and documentation |
 
 ---
 
@@ -206,6 +90,6 @@ https://github.com/tiennguyenit/genspark.git
 
 # Acknowledgements
 
-Special thanks to the SDLC & Python Foundations training program for providing guidance and resources throughout this project.
+Special thanks to the Genspark's SDLC & Python Foundations training team for providing guidance and resources throughout this course.
 
-This project represents the application of software engineering principles and Python programming skills to create a structured and maintainable software solution.
+This course represents the application of software engineering principles and Python programming skills to create a structured and maintainable software solution.
