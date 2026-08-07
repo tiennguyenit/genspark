@@ -1,0 +1,97 @@
+       ID DIVISION.
+       PROGRAM-ID. CIDBSEL.
+       ENVIRONMENT DIVISION.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01  END-OF-SESSION-MESSAGE      PIC X(40) VALUE
+                      '____ ____ TYPE CESF LOGOFF FOR EXIT..'.
+       01 WS-COMMAREA    PIC X(100).
+       COPY EMA95MS.
+       COPY DFHAID.
+                EXEC SQL
+                    INCLUDE SQLCA
+                END-EXEC.
+                EXEC SQL
+                    INCLUDE EMP1
+                END-EXEC.
+
+       PROCEDURE DIVISION.
+       000-MAIN-PARA.
+           IF EIBCALEN = 0
+              MOVE LOW-VALUE TO EMA95MPO
+              PERFORM 1000-SEND-MAP
+           ELSE
+              MOVE DFHCOMMAREA TO WS-COMMAREA
+              EVALUATE TRUE
+                  WHEN EIBAID = DFHPF3
+                     PERFORM 3000-SEND-TERMINATION-MESSAGE
+                     EXEC CICS
+                         RETURN
+                     END-EXEC
+                  WHEN EIBAID = DFHPF2
+                       MOVE LOW-VALUE TO EMA95MPO
+                       PERFORM 1000-SEND-MAP
+                 WHEN EIBAID = DFHENTER OR DFHPF1
+                     PERFORM 2000-PROCESS-MAP
+                        THRU 2000-EXIT
+                     PERFORM 1000-SEND-MAP
+                 WHEN OTHER
+                     MOVE 'INVALID KEY PRESSED. PRESS CORRECT KEY'
+                       TO MSGO
+                     PERFORM 1000-SEND-MAP
+             END-EVALUATE
+           END-IF.
+           EXEC CICS
+               RETURN TRANSID('95AD')
+                      COMMAREA(WS-COMMAREA)
+           END-EXEC.
+
+
+       1000-SEND-MAP.
+           EXEC CICS
+                SEND MAP('EMA95MP')
+                     MAPSET('EMA95MS')
+                     FROM(EMA95MPO)
+                     ERASE
+           END-EXEC.
+
+       2000-PROCESS-MAP.
+
+           EXEC CICS RECEIVE
+                      MAP('EMA95MP')
+                      MAPSET('EMA95MS')
+                      INTO(EMA95MPI)
+              END-EXEC.
+
+           MOVE EMPIDI     TO EMPLOYEE-NO.
+           MOVE EMPNAMEI   TO EMPLOYEE-NAME.
+           MOVE DEPTI      TO EMPLOYEE-DEPT.
+           MOVE LOCI       TO EMPLOYEE-LOCATION.
+           MOVE SALARYI    TO EMPLOYEE-SALARY.
+           EXEC SQL
+            INSERT INTO EMPLOYEE_TABLE ( EMPLOYEE_NO,EMPLOYEE_NAME,
+                     EMPLOYEE_DEPT,EMPLOYEE_LOCATION,EMPLOYEE_SALARY )
+               VALUES (
+               :EMPLOYEE-NO,
+               :EMPLOYEE-NAME,
+               :EMPLOYEE-DEPT,
+               :EMPLOYEE-LOCATION,
+               :EMPLOYEE-SALARY)
+           END-EXEC.
+
+           IF SQLCODE = 0
+              MOVE 'SUCCESSFULLY ADDED'    TO MSGO
+           ELSE
+              MOVE 'ERROR IN ADDING DATA '  TO MSGO
+           END-IF.
+
+       2000-EXIT.
+           EXIT.
+
+       3000-SEND-TERMINATION-MESSAGE.
+           EXEC CICS
+               SEND TEXT FROM(END-OF-SESSION-MESSAGE)
+                         ERASE
+                         FREEKB
+           END-EXEC.
+N

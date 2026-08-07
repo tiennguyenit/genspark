@@ -1,0 +1,108 @@
+CHS4MS  DFHMSD TYPE=&SYSPARM,                                          X
+               MODE=INOUT,LANG=COBOL,                                  X
+               STORAGE=AUTO,                                           X
+               TIOAPFX=YES,                                            X
+               MAPATTS=(COLOR,HILIGHT),                                X
+               DSATTS=(COLOR,HILIGHT),                                 X
+               CTRL=(FREEKB,ALARM)
+CHS4MP  DFHMDI SIZE=(24,80),LINE=1,COLUMN=1
+********************************************************************
+        DFHMDF POS=(5,10),LENGTH=21,ATTRB=ASKIP,                       X
+               INITIAL='1-EMPLOYEE INQ SCREEN'
+        DFHMDF POS=(6,10),LENGTH=21,ATTRB=ASKIP,                       X
+               INITIAL='2-EMPLOYEE ADD SCREEN'
+        DFHMDF POS=(7,10),LENGTH=21,ATTRB=ASKIP,                       X
+               INITIAL='3-DATE TIME SCREEN   '
+        DFHMDF POS=(9,10),LENGTH=14,ATTRB=ASKIP,                       X
+               INITIAL='ENTER CHOICE :'
+CHOICE  DFHMDF POS=(9,25),INITIAL='_',                                 X
+               LENGTH=1,ATTRB=(UNPROT)
+*******************************************************************
+DTS4MP  DFHMDI SIZE=(24,80),LINE=1,COLUMN=1
+********************************************************************
+        DFHMDF POS=(5,10),LENGTH=06,ATTRB=ASKIP,INITIAL='DATE :'
+DATE    DFHMDF POS=(5,17),INITIAL='          ',                        X
+               LENGTH=10,ATTRB=(PROT)
+********************************************************************
+        DFHMDF POS=(7,10),INITIAL='TIME :',LENGTH=06,ATTRB=PROT
+TIME    DFHMDF POS=(7,17),INITIAL='        ',                          X
+               LENGTH=6,ATTRB=(PROT)
+********************************************************************
+EMPS4MP DFHMDI SIZE=(24,80),LINE=1,COLUMN=1
+********************************************************************
+        DFHMDF POS=(03,25),                                            X
+               INITIAL='EMPLOYEE FILE INQUIRY',                        X
+               LENGTH=21,ATTRB=(PROT,BRT)
+********************************************************************
+        DFHMDF POS=(04,25),                                            X
+               INITIAL='---------------------',                        X
+               LENGTH=21,ATTRB=(PROT,BRT)
+********************************************************************
+        DFHMDF POS=(11,25),INITIAL='EMPID  :',LENGTH=8,ATTRB=ASKIP
+EMPID   DFHMDF POS=(11,34),INITIAL='_____',                            X
+               LENGTH=05,ATTRB=(UNPROT,IC)
+        DFHMDF POS=(11,40),ATTRB=ASKIP,LENGTH=1
+********************************************************************
+        DFHMDF POS=(13,25),INITIAL='EMPNAME:',LENGTH=8,ATTRB=ASKIP
+EMPNAME DFHMDF POS=(13,34),INITIAL='__________',                       X
+               LENGTH=10,ATTRB=(UNPROT)
+********************************************************************
+        DFHMDF POS=(15,25),INITIAL='SALARY :',LENGTH=8,ATTRB=ASKIP
+SALARY  DFHMDF POS=(15,34),INITIAL='_____',                            X
+               LENGTH=05,ATTRB=(UNPROT)
+********************************************************************
+        DFHMDF POS=(17,25),INITIAL='DEPT   :',LENGTH=8,ATTRB=ASKIP
+DEPT    DFHMDF POS=(17,34),INITIAL='___',                              X
+               LENGTH=03,ATTRB=(UNPROT)
+********************************************************************
+        DFHMDF POS=(22,02),LENGTH=16,ATTRB=(PROT),                     X
+               INITIAL='F1: DISPLAY DATA'
+        DFHMDF POS=(22,29),LENGTH=16,ATTRB=(PROT),                     X
+               INITIAL='F2: CLEAR SCREEN'
+        DFHMDF POS=(22,54),LENGTH=15,ATTRB=(PROT),                     X
+               INITIAL='F3: EXIT SCREEN'
+MSG     DFHMDF POS=(20,1),                                             X
+               LENGTH=79,                                              X
+               ATTRB=(BRT,PROT),                                       X
+               COLOR=YELLOW
+********************************************************************
+EMAS4MP DFHMDI SIZE=(24,80),LINE=1,COLUMN=1
+********************************************************************
+        DFHMDF POS=(03,25),                                            X
+               INITIAL='EMPLOYEE TABLE ADD',                           X
+               LENGTH=18,ATTRB=(PROT,BRT)
+********************************************************************
+        DFHMDF POS=(04,25),                                            X
+               INITIAL='---------------------',                        X
+               LENGTH=21,ATTRB=(PROT,BRT)
+********************************************************************
+        DFHMDF POS=(11,25),INITIAL='EMPID  :',LENGTH=8,ATTRB=ASKIP
+EID     DFHMDF POS=(11,34),INITIAL='_____',                            X
+               LENGTH=05,ATTRB=(UNPROT,IC)
+        DFHMDF POS=(11,40),ATTRB=ASKIP,LENGTH=1
+********************************************************************
+        DFHMDF POS=(13,25),INITIAL='EMPNAME:',LENGTH=8,ATTRB=ASKIP
+ENAME   DFHMDF POS=(13,34),INITIAL='__________',                       X
+               LENGTH=10,ATTRB=(UNPROT)
+********************************************************************
+        DFHMDF POS=(15,25),INITIAL='SALARY :',LENGTH=8,ATTRB=ASKIP
+ESAL    DFHMDF POS=(15,34),INITIAL='_____',                            X
+               LENGTH=05,ATTRB=(UNPROT)
+********************************************************************
+        DFHMDF POS=(17,25),INITIAL='DEPT   :',LENGTH=8,ATTRB=ASKIP
+EDEPT   DFHMDF POS=(17,34),INITIAL='___',                              X
+               LENGTH=03,ATTRB=(UNPROT)
+********************************************************************
+        DFHMDF POS=(23,02),LENGTH=16,ATTRB=(PROT),                     X
+               INITIAL='F1: ADD  DATA'
+        DFHMDF POS=(23,29),LENGTH=16,ATTRB=(PROT),                     X
+               INITIAL='F2: CLEAR SCREEN'
+        DFHMDF POS=(23,54),LENGTH=15,ATTRB=(PROT),                     X
+               INITIAL='F3: EXIT SCREEN'
+MESG    DFHMDF POS=(23,1),                                             X
+               LENGTH=79,                                              X
+               ATTRB=(BRT,PROT),                                       X
+               COLOR=YELLOW
+        DFHMSD TYPE=FINAL
+        END
+r

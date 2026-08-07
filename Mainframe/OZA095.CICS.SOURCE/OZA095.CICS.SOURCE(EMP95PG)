@@ -1,0 +1,110 @@
+       ID DIVISION.
+       PROGRAM-ID. OZAGCPG.
+       ENVIRONMENT DIVISION.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01  END-OF-SESSION-MESSAGE      PIC X(40) VALUE
+                      '____ ____ TYPE CESF LOGOFF FOR EXIT..'.
+       01 WS-COMMAREA    PIC X(100).
+       01 WS-EMP-REC.
+          05 WS-EMP-ID       PIC X(05).
+          05 FILLER          PIC X.
+          05 WS-EMP-NAME     PIC X(10).
+          05 FILLER          PIC X.
+          05 WS-EMP-SALARY   PIC 9(05).
+          05 FILLER          PIC X.
+          05 WS-EMP-DEPT     PIC X(03).
+          05 FILLER          PIC X(57).
+       01 WS-SALARY-EDIT     PIC ZZZZ9.99.
+       01 WS-SALARY-NUMERIC PIC 9(5)V99.
+       01 WS-REC-LEN         PIC S9(4) COMP.
+       01 WS-KEY-LEN         PIC S9(4) COMP.
+       01 WS-RESP            PIC S9(8) COMP.
+       COPY EMP95MS.
+       COPY DFHAID.
+      *COPY DFHBMSCA.
+       LINKAGE SECTION.
+       01 DFHCOMMAREA    PIC X(100).
+
+       PROCEDURE DIVISION.
+           MOVE +80 TO WS-REC-LEN.
+           MOVE +05 TO WS-KEY-LEN.
+           IF EIBCALEN = 0
+              MOVE LOW-VALUE TO EMP95MPO
+              PERFORM 1000-SEND-MAP
+           ELSE
+              MOVE DFHCOMMAREA TO WS-COMMAREA
+              EVALUATE TRUE
+                  WHEN EIBAID = DFHPF3
+                     PERFORM 3000-SEND-TERMINATION-MESSAGE
+                     EXEC CICS
+                         RETURN
+                     END-EXEC
+                  WHEN EIBAID = DFHPF2
+                       MOVE LOW-VALUE TO EMP95MPO
+                       PERFORM 1000-SEND-MAP
+                 WHEN EIBAID = DFHENTER OR DFHPF1
+                     PERFORM 2000-PROCESS-MAP
+                        THRU 2000-EXIT
+                     PERFORM 1000-SEND-MAP
+                 WHEN OTHER
+                     MOVE 'INVALID KEY PRESSED. PRESS CORRECT KEY'
+                       TO MSGO
+                     PERFORM 1000-SEND-MAP
+             END-EVALUATE
+           END-IF.
+           EXEC CICS
+               RETURN TRANSID('95IQ')
+                      COMMAREA(WS-COMMAREA)
+           END-EXEC.
+
+       1000-SEND-MAP.
+           EXEC CICS
+                SEND MAP('EMP95MP')
+                     MAPSET('EMP95MS')
+                     FROM(EMP95MPO)
+                     ERASE
+           END-EXEC.
+
+       2000-PROCESS-MAP.
+
+           EXEC CICS RECEIVE
+                      MAP('EMP95MP')
+                      MAPSET('EMP95MS')
+                      INTO(EMP95MPI)
+              END-EXEC.
+
+           MOVE EMPIDI     TO WS-EMP-ID
+
+                EXEC CICS  READ
+                 DATASET('S4EMPF')
+                   INTO(WS-EMP-REC)
+                   RIDFLD(WS-EMP-ID)
+                   LENGTH(WS-REC-LEN)
+                   KEYLENGTH(WS-KEY-LEN)
+                   RESP(WS-RESP)
+                  END-EXEC.
+
+           IF WS-RESP = DFHRESP(NORMAL)
+              MOVE WS-EMP-ID         TO EMPIDO
+              MOVE WS-EMP-NAME       TO EMPNAMEO
+              MOVE WS-EMP-SALARY     TO SALARYO
+              MOVE WS-EMP-DEPT       TO DEPTO
+              MOVE 'SUCCESSFULLY RETRIVED '  TO MSGO
+           ELSE
+              MOVE LOW-VALUES     TO EMPIDO
+              MOVE LOW-VALUES     TO EMPNAMEO
+              MOVE ZEROS          TO SALARYO
+              MOVE LOW-VALUES     TO DEPTO
+              MOVE 'ERROR IN READING  DATA '  TO MSGO
+           END-IF.
+
+       2000-EXIT.
+           EXIT.
+       3000-SEND-TERMINATION-MESSAGE.
+           EXEC CICS
+               SEND TEXT FROM(END-OF-SESSION-MESSAGE)
+                         ERASE
+                         FREEKB
+           END-EXEC.
+£

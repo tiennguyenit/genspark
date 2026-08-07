@@ -1,0 +1,55 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. FILEPS.                                              00020001
+       ENVIRONMENT DIVISION.                                            00030000
+       INPUT-OUTPUT SECTION.                                            00031001
+       FILE-CONTROL.                                                    00032001
+           SELECT EMP-FILE ASSIGN TO DD1                                00033001
+               ORGANIZATION IS SEQUENTIAL                               00034001
+               ACCESS MODE IS SEQUENTIAL                                00035001
+               FILE STATUS IS WS-FILE-STATUS.                           00036001
+       DATA DIVISION.                                                   00040000
+       FILE SECTION.                                                    00041001
+       FD  EMP-FILE                                                     00042001
+           RECORD CONTAINS 80 CHARACTERS                                00043001
+           DATA RECORD IS EMP-REC.                                      00045001
+       01  EMP-REC.                                                     00047001
+           05 EMP-NO        PIC X(5).
+           05 FILLER        PIC X(01).
+           05 EMP-NAME      PIC X(10).                                  00049001
+           05 FILLER        PIC X(01).                                  00049101
+           05 EMP-DEPT      PIC X(03).                                  00049202
+           05 FILLER        PIC X(01).                                  00049301
+           05 EMP-LOCATION  PIC X(10).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-SALARY    PIC 9(5)V99.
+           05 FILLER        PIC X(41).                                  00049502
+       WORKING-STORAGE SECTION.                                         00050000
+       01  WS-FILE-STATUS   PIC XX.                                     00051001
+       01  WS-EOF           PIC X VALUE 'N'.                            00052001
+                                                                        00060000
+           EXEC SQL INCLUDE SQLCA END-EXEC.
+           EXEC SQL INCLUDE EMP1  END-EXEC.
+       PROCEDURE DIVISION.                                              00170000
+       MAIN-PARA.                                                       00180000
+           OPEN INPUT EMP-FILE                                          00190001
+           IF (WS-FILE-STATUS NOT = "00")                               00200001
+               DISPLAY "ERROR OPENING FILE, STATUS = " WS-FILE-STATUS   00210001
+               STOP RUN                                                 00220001
+           END-IF                                                       00230001
+           PERFORM UNTIL WS-EOF = 'Y'                                   00231001
+               READ EMP-FILE                                            00232001
+                   AT END                                               00233001
+                       MOVE 'Y' TO WS-EOF                               00234001
+                   NOT AT END                                           00235001
+            EXEC SQL                                                    00290000
+             INSERT INTO EMPLOYEE_TABLE(EMPLOYEE_NO, EMPLOYEE_NAME,     00350002
+               EMPLOYEE_DEPT, EMPLOYEE_LOCATION, EMPLOYEE_SALARY)
+                 VALUES (:EMP-ACCTNO, :EMP-NAME,
+                         :EMP-ADDR, :EMP-GENDER, :EMP-ACTYPE,
+                         :EMP-DTOPEN, :EMP-BALANCE)
+             END-EXEC.
+               END-READ                                                 00239201
+           END-PERFORM                                                  00239301
+           CLOSE EMP-FILE                                               00239401
+           STOP RUN.                                                    00240000
+ê

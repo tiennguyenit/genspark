@@ -1,0 +1,115 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ITEMREP.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT KSDSRT-FILE ASSIGN TO DD1
+               ORGANIZATION IS indexed
+               ACCESS MODE IS SEQUENTIAL
+               RECORD KEY IS KSDS-ITMNO
+               FILE STATUS IS WS-FILE-STATUS.
+           SELECT REPORT-FILE ASSIGN TO DD2
+               ORGANIZATION IS SEQUENTIAL
+               ACCESS MODE IS SEQUENTIAL.
+       DATA DIVISION.
+       FILE SECTION.
+       FD  REPORT-FILE
+           DATA RECORD IS REPORT-REC.
+       01  REPORT-REC    PIC X(080).
+       FD  KSDSRT-FILE
+           DATA RECORD IS KSDSRT-REC.
+       COPY KSDSRP.
+       WORKING-STORAGE SECTION.
+       01  WS-ITM-REC.
+           05  WS-ITMNO     PIC X(05).
+           05  FILLER       PIC X.
+           05  WS-ITMNAME   PIC X(10).
+           05  FILLER       PIC X.
+           05  WS-PRICE     PIC 9(5).
+           05  FILLER       PIC X.
+           05  WS-QNT       PIC 9(03).
+           05  FILLER       PIC X(54).
+       01  WS-PAGE-COUNT       PIC 9(03) VALUE 0.
+       01  WS-REC-IN-PAGE      PIC 9(03) VALUE 0.
+       01  WS-TOTAL-QNT        PIC 9(03) VALUE 0.
+       01  WS-PAGE-QNT         PIC 9(03) VALUE 0.
+       01  WS-TOTAL-PRICE      PIC 9(10)V99 VALUE 0.
+       01  WS-PAGE-PRICE       PIC 9(10)V99 VALUE 0.
+       01  WS-END-FILE         PIC X VALUE 'N'.
+       01  WS-PAGE-PRICE-EDIT    PIC Z(10).99.
+       01  WS-TOTAL-PRICE-EDIT   PIC Z(10).99.
+       01  WS-PRICE-EDIT         PIC Z(8).99.
+       01  WS-FILE-STATUS   PIC XX.
+       PROCEDURE DIVISION.
+       MAIN-PARA.
+           OPEN INPUT  KSDSRT-FILE
+           OPEN OUTPUT REPORT-FILE
+
+           PERFORM UNTIL WS-END-FILE = 'Y'
+              READ KSDSRT-FILE
+                 AT END
+                 MOVE 'Y' TO WS-END-FILE
+                 NOT AT END
+                 MOVE KSDSRT-REC TO WS-ITM-REC
+                 PERFORM WRITE-DETAIL
+              END-READ
+           END-PERFORM
+
+           PERFORM WRITE-FOOTER
+
+           CLOSE REPORT-FILE KSDSRT-FILE
+           STOP RUN.
+
+       WRITE-DETAIL.
+           IF WS-REC-IN-PAGE = 0
+              PERFORM WRITE-HEADER
+           END-IF
+           MOVE WS-PRICE        TO WS-PRICE-EDIT
+
+           STRING WS-ITMNO DELIMITED BY SIZE
+                  '  ' DELIMITED BY SIZE
+                  WS-ITMNAME DELIMITED BY SIZE
+                  '    ' DELIMITED BY SIZE
+                  WS-QNT DELIMITED BY SIZE
+                  '   ' DELIMITED BY SIZE
+                  WS-PRICE-EDIT DELIMITED BY SIZE
+                  INTO REPORT-REC
+           END-STRING
+           WRITE REPORT-REC
+
+           ADD 1 TO WS-REC-IN-PAGE
+           ADD WS-QNT   TO WS-TOTAL-QNT
+           ADD WS-QNT   TO WS-PAGE-QNT
+           ADD WS-PRICE TO WS-TOTAL-PRICE
+           ADD WS-PRICE TO WS-PAGE-PRICE
+
+           IF WS-REC-IN-PAGE >= 6
+              PERFORM WRITE-FOOTER
+              MOVE 0 TO WS-REC-IN-PAGE
+              MOVE 0 TO WS-PAGE-QNT
+              MOVE 0 TO WS-PAGE-PRICE
+           END-IF.
+
+       WRITE-HEADER.
+           ADD 1 TO WS-PAGE-COUNT
+           MOVE '*** ITEM RECORD REPORT ***' TO REPORT-REC
+           WRITE REPORT-REC
+           MOVE SPACES TO REPORT-REC
+           MOVE 'ITM-ID NAME          QUANTITY  PRICE'
+                                    to     REPORT-REC
+           WRITE REPORT-REC.
+
+       WRITE-FOOTER.
+           MOVE WS-TOTAL-PRICE   TO WS-TOTAL-PRICE-EDIT
+           STRING 'PAGE:' WS-PAGE-COUNT DELIMITED BY SIZE
+                ' RECORDS:' WS-REC-IN-PAGE DELIMITED BY SIZE
+                ' QUANTITY:' WS-TOTAL-QNT DELIMITED BY SIZE
+                ' TOTAL PRICE:' WS-TOTAL-PRICE-EDIT DELIMITED BY SIZE
+                INTO REPORT-REC
+           END-STRING
+           WRITE REPORT-REC
+           MOVE SPACES TO REPORT-REC
+           WRITE REPORT-REC.
+
+@

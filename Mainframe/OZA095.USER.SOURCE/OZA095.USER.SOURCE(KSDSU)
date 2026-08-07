@@ -1,0 +1,57 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. KSREAD.                                              00020000
+       ENVIRONMENT DIVISION.                                            00030000
+       INPUT-OUTPUT SECTION.                                            00040000
+       FILE-CONTROL.                                                    00050000
+           SELECT EMP-FILE ASSIGN TO DD1                                00060000
+               ORGANIZATION IS INDEXED                                  00070000
+               ACCESS MODE IS RANDOM                                    00080000
+               RECORD KEY IS EMP-ID                                     00090000
+               FILE STATUS IS WS-FILE-STATUS.                           00100000
+       DATA DIVISION.                                                   00110000
+       FILE SECTION.                                                    00120000
+       FD  EMP-FILE                                                     00130000
+           RECORD CONTAINS 80 CHARACTERS                                00140000
+           DATA RECORD IS EMP-REC.                                      00150000
+       01  EMP-REC.                                                     00160000
+           05 EMP-ID        PIC X(05).                                  00170000
+           05 FILLER        PIC X(01).                                  00180000
+           05 EMP-NAME      PIC X(10).                                  00190000
+           05 FILLER        PIC X(01).                                  00200000
+           05 EMP-SALARY    PIC 9(05).                                  00210000
+           05 FILLER        PIC X(01).                                  00220000
+           05 EMP-DEPT      PIC X(03).                                  00230000
+           05 FILLER        PIC X(54).                                  00240000
+       WORKING-STORAGE SECTION.                                         00250000
+       01  WS-FILE-STATUS   PIC XX.                                     00260000
+       01  WS-EOF           PIC X VALUE 'N'.                            00270000
+       01  WS-EMPID         PIC X(05).                                  00270000
+       01  WS-SALARY        PIC 9(05).                                  00270000
+      *                                                                 00280000
+       PROCEDURE DIVISION.                                              00290000
+       MAIN-PARA.                                                       00300000
+           OPEN I-O   EMP-FILE.                                         00350000
+           IF WS-FILE-STATUS NOT = "00"                                 00360000
+               DISPLAY "ERROR OPENING FILE, STATUS = " WS-FILE-STATUS   00370000
+               STOP RUN                                                 00380000
+           END-IF.                                                      00390000
+           ACCEPT WS-EMPID.
+           MOVE WS-EMPID TO EMP-ID                                      00390101
+           READ EMP-FILE                                                00391001
+                 INVALID KEY                                            00392001
+                 DISPLAY "RECORD NOT FOUND"                             00392101
+                 PERFORM CLOSE-PARA                                     00393001
+           END-READ.                                                    00394001
+           ACCEPT WS-SALARY.
+            MOVE WS-SALARY TO EMP-SALARY                                00395001
+               REWRITE EMP-REC.                                         00400001
+                  IF WS-FILE-STATUS = "00"                              00410000
+                       DISPLAY "RECORD UPDATED SUCESSFULLY"             00460001
+                  ELSE                                                  00470000
+                       DISPLAY "ERROR IN UPDATING FILE" WS-FILE-STATUS  00480001
+                  END-IF.                                               00490000
+       CLOSE-PARA.                                                      00491001
+           CLOSE EMP-FILE                                               00500000
+           STOP RUN.                                                    00510000
+
+9

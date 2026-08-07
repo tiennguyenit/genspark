@@ -1,0 +1,122 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. FILEPS.                                              00020001
+       ENVIRONMENT DIVISION.                                            00030000
+       INPUT-OUTPUT SECTION.                                            00031001
+       FILE-CONTROL.                                                    00032001
+           SELECT EMP-FILE ASSIGN TO DD1                                00033001
+               ORGANIZATION IS SEQUENTIAL                               00034001
+               ACCESS MODE IS SEQUENTIAL                                00035001
+               FILE STATUS IS WS-FILE-STATUS1.                          00036001
+           SELECT OUT-FILE ASSIGN TO UT-AS-DD2                          00033001
+               ORGANIZATION IS SEQUENTIAL                               00034001
+               ACCESS MODE IS SEQUENTIAL                                00035001
+               FILE STATUS IS WS-FILE-STATUS2.                          00036001
+           SELECT OUT-FILE2 ASSIGN TO UT-AS-DD3                         00033001
+               ORGANIZATION IS SEQUENTIAL                               00034001
+               ACCESS MODE IS SEQUENTIAL                                00035001
+               FILE STATUS IS WS-FILE-STATUS3.                          00036001
+       DATA DIVISION.                                                   00040000
+       FILE SECTION.                                                    00041001
+       FD  EMP-FILE                                                     00042001
+           RECORD CONTAINS 80 CHARACTERS                                00043001
+           DATA RECORD IS EMP-REC.                                      00045001
+       01  EMP-REC.                                                     00047001
+           05 EMP-ID        PIC X(05).                                  00048001
+           05 FILLER        PIC X(01).                                  00048101
+           05 EMP-NAME      PIC X(10).                                  00049001
+           05 FILLER        PIC X(01).                                  00049101
+           05 EMP-SALARY    PIC 9(05).                                  00049202
+           05 FILLER        PIC X(01).                                  00049301
+           05 EMP-DEPT      PIC X(03).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-GEN       PIC X(01).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-LOC       PIC X(10).                                  00049402
+           05 FILLER        PIC X(41).                                  00049502
+       FD  OUT-FILE                                                     00042001
+           RECORD CONTAINS 80 CHARACTERS                                00043001
+           DATA RECORD IS OUT-REC.                                      00045001
+       01  OUT-REC.                                                     00047001
+           05 EMP-ID1       PIC X(05).                                  00048001
+           05 FILLER        PIC X(01).                                  00048101
+           05 EMP-NAME1     PIC X(10).                                  00049001
+           05 FILLER        PIC X(01).                                  00049101
+           05 EMP-SALARY1   PIC 9(05).                                  00049202
+           05 FILLER        PIC X(01).                                  00049301
+           05 EMP-DEPT1     PIC X(03).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-GEN1      PIC X(01).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-LOC1      PIC X(10).                                  00049402
+           05 FILLER        PIC X(41).                                  00049502
+       FD  OUT-FILE2                                                    00042001
+           RECORD CONTAINS 80 CHARACTERS                                00043001
+           DATA RECORD IS OUT-REC2.                                     00045001
+       01  OUT-REC2.                                                    00047001
+           05 EMP-ID2       PIC X(05).                                  00048001
+           05 FILLER        PIC X(01).                                  00048101
+           05 EMP-NAME2     PIC X(10).                                  00049001
+           05 FILLER        PIC X(01).                                  00049101
+           05 EMP-SALARY2   PIC 9(05).                                  00049202
+           05 FILLER        PIC X(01).                                  00049301
+           05 EMP-DEPT2     PIC X(03).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-GEN2      PIC X(01).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 EMP-LOC2      PIC X(10).                                  00049402
+           05 FILLER        PIC X(41).                                  00049502
+       WORKING-STORAGE SECTION.                                         00050000
+       01  WS-FILE-STATUS1  PIC XX.                                     00051001
+       01  WS-FILE-STATUS2  PIC XX.                                     00051001
+       01  WS-FILE-STATUS3  PIC XX.                                     00051001
+       01  WS-EOF           PIC X VALUE 'N'.                            00052001
+       01  WS-EOF1          PIC X VALUE 'N'.                            00052001
+       01  WS-EOF2          PIC X VALUE 'N'.                            00052001
+      *                                                                 00060000
+       PROCEDURE DIVISION.                                              00170000
+       MAIN-PARA.                                                       00180000
+           OPEN INPUT EMP-FILE                                          00190001
+           OPEN OUTPUT OUT-FILE                                         00190001
+           OPEN OUTPUT OUT-FILE2                                        00190001
+           IF (WS-FILE-STATUS1 NOT = "00" )                             00200001
+                               AND ( WS-FILE-STATUS2 NOT ="00" )
+                               AND ( WS-FILE-STATUS3 NOT ="00" )
+               DISPLAY "ERROR OPENING FILE, STATUS = " WS-FILE-STATUS1  00210001
+               STOP RUN                                                 00220001
+           END-IF                                                       00230001
+           PERFORM UNTIL WS-EOF = 'Y'                                   00231001
+               READ EMP-FILE                                            00232001
+                   AT END                                               00233001
+                       MOVE 'Y' TO WS-EOF                               00234001
+                   NOT AT END                                           00235001
+                    IF ( EMP-GEN = 'M' )
+                       MOVE EMP-REC  TO OUT-REC
+                       WRITE OUT-REC
+                    ELSE
+                       MOVE EMP-REC TO OUT-REC2
+                       WRITE OUT-REC2
+                    END-IF
+               END-READ                                                 00239201
+           END-PERFORM                                                  00239301
+           CLOSE EMP-FILE OUT-FILE OUT-FILE2                            00239401
+           OPEN INPUT OUT-FILE                                          00190001
+           OPEN INPUT OUT-FILE2                                         00190001
+           PERFORM UNTIL WS-EOF1 = 'Y'                                  00231001
+               READ OUT-FILE                                            00232001
+                   AT END                                               00233001
+                       MOVE 'Y' TO WS-EOF1                              00234001
+                   NOT AT END                                           00235001
+                       DISPLAY 'LOCATION MALE ALLOCATED: ' EMP-LOC1
+               END-READ                                                 00239201
+           END-PERFORM                                                  00239301
+           PERFORM UNTIL WS-EOF2 = 'Y'                                  00231001
+               READ OUT-FILE2                                           00232001
+                   AT END                                               00233001
+                       MOVE 'Y' TO WS-EOF2                              00234001
+                   NOT AT END                                           00235001
+                       DISPLAY 'LOCATION FEMALE ALLOCATED: ' EMP-LOC2
+               END-READ                                                 00239201
+           END-PERFORM                                                  00239301
+           CLOSE OUT-FILE OUT-FILE2                                     00239401
+           STOP RUN.                                                    00240000
+ 

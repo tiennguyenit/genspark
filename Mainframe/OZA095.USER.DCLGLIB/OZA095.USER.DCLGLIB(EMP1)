@@ -1,0 +1,27 @@
+      ******************************************************************
+      * DCLGEN TABLE(EMPLOYEE_TABLE)                                   *
+      *        LIBRARY(OZA095.USER.DCLGLIB(EMP1))                      *
+      *        LANGUAGE(COBOL)                                         *
+      *        QUOTE                                                   *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE EMPLOYEE_TABLE TABLE
+           ( EMPLOYEE_NO                    CHAR(5) NOT NULL,
+             EMPLOYEE_NAME                  CHAR(10) NOT NULL,
+             EMPLOYEE_DEPT                  CHAR(3) NOT NULL,
+             EMPLOYEE_LOCATION              CHAR(10) NOT NULL,
+             EMPLOYEE_SALARY                DECIMAL(7, 2) NOT NULL
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE EMPLOYEE_TABLE                     *
+      ******************************************************************
+       01  DCLEMPLOYEE-TABLE.
+           10 EMPLOYEE-NO          PIC X(5).
+           10 EMPLOYEE-NAME        PIC X(10).
+           10 EMPLOYEE-DEPT        PIC X(3).
+           10 EMPLOYEE-LOCATION    PIC X(10).
+           10 EMPLOYEE-SALARY      PIC S9(5)V9(2) USAGE COMP-3.
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 5       *
+      ******************************************************************
+*

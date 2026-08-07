@@ -1,0 +1,66 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. PSDB2.                                               00020000
+       ENVIRONMENT DIVISION.                                            00030000
+       INPUT-OUTPUT SECTION.                                            00040000
+       FILE-CONTROL.                                                    00050000
+           SELECT EMPLOYEEFILE ASSIGN TO DD1                            00060000
+               ORGANIZATION IS SEQUENTIAL                               00070000
+               FILE STATUS IS WS-FILE-STATUS.
+       DATA DIVISION.                                                   00080000
+       FILE SECTION.                                                    00090000
+       FD EMPLOYEEFILE                                                  00100000
+            RECORD CONTAINS 80 CHARACTERS                               00110002
+            DATA RECORD IS EMPLOYEE-REC.                                00130002
+       01 EMPLOYEE-REC.                                                 00140000
+          05 PS-EMPLOYEE-NO PIC X(5).                                   00150003
+          05 FILLER         PIC X.                                      00151000
+          05 PS-EMPLOYEE-NAME PIC X(10).                                00160003
+          05 FILLER         PIC X.                                      00161000
+          05 PS-EMPLOYEE-DEPT PIC X(3).                                 00150003
+          05 FILLER         PIC X.                                      00151000
+          05 PS-EMPLOYEE-LOCATION PIC X(10).                            00160003
+          05 FILLER         PIC X.                                      00161000
+          05 PS-EMPLOYEE-SALARY PIC 9(5)V99.                            00160003
+          05 FILLER         PIC X(41).                                  00161000
+       WORKING-STORAGE SECTION.                                         00170000
+             EXEC SQL INCLUDE SQLCA END-EXEC.                           00180002
+             EXEC SQL INCLUDE EMP1  END-EXEC.                           00181002
+       01 WS-FILE-STATUS   PIC XX.                                      00200004
+       01 WS-EOF           PIC X(01) VALUE 'N'.                         00201000
+       PROCEDURE DIVISION.                                              00202001
+       MAIN-PARA.                                                       00210000
+           OPEN INPUT EMPLOYEEFILE                                      00220000
+           IF (WS-FILE-STATUS NOT = "00")                               00200001
+               DISPLAY "ERROR OPENING FILE, STATUS = " WS-FILE-STATUS   00210001
+               STOP RUN                                                 00220001
+           END-IF                                                       00230001
+           PERFORM UNTIL WS-EOF = 'Y'                                   00230002
+              READ EMPLOYEEFILE                                         00240000
+                 AT END                                                 00250003
+                 MOVE 'Y' TO WS-EOF                                     00260003
+                 NOT AT END                                             00261003
+               MOVE PS-EMPLOYEE-NO TO EMPLOYEE-NO
+               MOVE PS-EMPLOYEE-NAME TO EMPLOYEE-NAME
+               MOVE PS-EMPLOYEE-DEPT TO EMPLOYEE-DEPT
+               MOVE PS-EMPLOYEE-LOCATION TO EMPLOYEE-LOCATION
+               MOVE PS-EMPLOYEE-SALARY TO EMPLOYEE-SALARY
+              EXEC SQL                                                  00290000
+                 INSERT INTO EMPLOYEE_TABLE (EMPLOYEE_NO,               00300000
+                                             EMPLOYEE_NAME,
+                                             EMPLOYEE_DEPT,
+                                             EMPLOYEE_LOCATION,
+                                             EMPLOYEE_SALARY)
+                 VALUES (:EMPLOYEE-NO,                                  00310004
+                         :EMPLOYEE-NAME,
+                         :EMPLOYEE-DEPT,
+                         :EMPLOYEE-LOCATION,
+                         :EMPLOYEE-SALARY)
+              END-EXEC                                                  00320000
+                   IF SQLCODE NOT = 0                                   00330000
+                        DISPLAY 'INSERT ERROR: ' SQLCODE                00340000
+                     END-IF                                             00350000
+              END-READ                                                  00351003
+           END-PERFORM.                                                 00360003
+              CLOSE EMPLOYEEFILE.                                       00370003
+           STOP RUN.                                                    00390002
+

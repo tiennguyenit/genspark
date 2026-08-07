@@ -1,0 +1,40 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. HELLOW1.
+       ENVIRONMENT DIVISION.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       77 FNAME    PIC X(5).
+       77 MNAME    PIC X(5).
+       77 LNAME    PIC X(5).
+       77 FULLNAME PIC X(15).
+       77 SEN1     PIC X(20) VALUE 'ALL IS WELL'.
+       77 WORD1    PIC X(5).
+       77 WORD2    PIC X(5).
+       77 WORD3    PIC X(5).
+       01 WS-STRING-1 PIC X(40) VALUE 'GODS OWN COUNTRY'.
+       01 WS-COUNT    PIC 9(2).
+       01 WS-STRING-2 PIC X(40) VALUE 'GODS.OWN.COUNTRY'.
+       PROCEDURE DIVISION.
+       0100-MAIN-PARA.
+           ACCEPT FNAME.
+           ACCEPT MNAME.
+           ACCEPT LNAME.
+           STRING FNAME DELIMITED BY SIZE
+                  MNAME DELIMITED BY SIZE
+                  LNAME DELIMITED BY SIZE
+             INTO FULLNAME.
+           DISPLAY FULLNAME.
+           UNSTRING SEN1 DELIMITED BY SPACE
+             INTO WORD1
+                  WORD2
+                  WORD3
+           END-UNSTRING
+           DISPLAY WORD1.
+           DISPLAY WORD2.
+           DISPLAY WORD3.
+           INSPECT WS-STRING-1 TALLYING WS-COUNT FOR ALL 'O'.
+           DISPLAY 'NUMBER OF O = ' WS-COUNT.
+           INSPECT WS-STRING-2 REPLACING ALL '.' BY ' '.
+           DISPLAY 'REPLACED: '     WS-STRING-2.
+           STOP RUN.
+ 

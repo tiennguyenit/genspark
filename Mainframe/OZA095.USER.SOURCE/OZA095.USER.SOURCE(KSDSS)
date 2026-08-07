@@ -1,0 +1,51 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. FILEPS.                                              00020001
+       ENVIRONMENT DIVISION.                                            00030000
+       INPUT-OUTPUT SECTION.                                            00031001
+       FILE-CONTROL.                                                    00032001
+           SELECT KSDS-FILE ASSIGN TO DD1                               00033001
+               ORGANIZATION IS INDEXED                                  00034001
+               ACCESS MODE IS RANDOM                                    00035001
+               RECORD KEY IS KSDS-ID
+               FILE STATUS IS WS-FILE-STATUS.                           00036001
+       DATA DIVISION.                                                   00040000
+       FILE SECTION.                                                    00041001
+       FD  KSDS-FILE                                                    00042001
+           RECORD CONTAINS 80 CHARACTERS                                00043001
+           DATA RECORD IS KSDS-REC.                                     00045001
+       01  KSDS-REC.                                                    00047001
+           05 KSDS-ID       PIC X(05).                                  00048001
+           05 FILLER        PIC X(01).                                  00048101
+           05 KSDS-NAME     PIC X(10).                                  00049001
+           05 FILLER        PIC X(01).                                  00049101
+           05 KSDS-SALARY   PIC 9(05).                                  00049202
+           05 FILLER        PIC X(01).                                  00049301
+           05 KSDS-DEPT     PIC X(03).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 KSDS-GEN      PIC X(01).                                  00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 KSDS-LOC      PIC X(10).                                  00049402
+           05 FILLER        PIC X(41).                                  00049502
+       WORKING-STORAGE SECTION.                                         00050000
+       01  WS-FILE-STATUS   PIC XX.                                     00051001
+       01  WS-EMPID         PIC X(05).
+      *                                                                 00060000
+       PROCEDURE DIVISION.                                              00170000
+       MAIN-PARA.                                                       00180000
+           OPEN INPUT KSDS-FILE                                         00190001
+           ACCEPT WS-EMPID
+           MOVE WS-EMPID TO KSDS-ID
+           READ KSDS-FILE
+           IF (WS-FILE-STATUS = "00" )                                  00200001
+               DISPLAY "EMPLOYEE ID: " KSDS-ID                          00210001
+               DISPLAY "EMPLOYEE NAME: " KSDS-NAME                      00210001
+               DISPLAY "EMPLOYEE SALARY: " KSDS-SALARY                  00210001
+               DISPLAY "EMPLOYEE DEPARTMENT: " KSDS-DEPT                00210001
+               DISPLAY "EMPLOYEE GENDER: " KSDS-GEN                     00210001
+               DISPLAY "EMPLOYEE LOCATION: " KSDS-LOC                   00210001
+           ELSE
+               DISPLAY "RECORD NOT FOUND"
+           END-IF                                                       00230001
+           CLOSE KSDS-FILE                                              00239401
+           STOP RUN.                                                    00240000
+ð

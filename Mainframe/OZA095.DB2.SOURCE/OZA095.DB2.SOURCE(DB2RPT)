@@ -1,0 +1,112 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. BOSREP.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT REPORT-FILE ASSIGN TO DD1
+               ORGANIZATION IS SEQUENTIAL
+               ACCESS MODE IS SEQUENTIAL.
+       DATA DIVISION.
+       FILE SECTION.
+       FD  REPORT-FILE
+           DATA RECORD IS REPORT-REC.
+       01  REPORT-REC    PIC X(080).
+
+       WORKING-STORAGE SECTION.
+            EXEC SQL INCLUDE SQLCA END-EXEC.
+            EXEC SQL INCLUDE BONUS END-EXEC.
+       01  WS-BOS-REC.
+           05  WS-BOSNO     PIC X(05).
+           05  WS-BOSNAME   PIC X(10).
+           05  WS-BONUS     PIC S9(5)V9(2) USAGE COMP-3.
+
+       01  WS-PAGE-COUNT       PIC 9(03) VALUE 0.
+       01  WS-REC-IN-PAGE      PIC 9(03) VALUE 0.
+       01  WS-TOTAL-BONUS      PIC 9(10)V99 VALUE 0.
+       01  WS-PAGE-BONUS       PIC 9(10)V99 VALUE 0.
+       01  WS-END-FILE         PIC X VALUE 'N'.
+       01  WS-PAGE-BONUS-EDIT    PIC Z(10).99.
+       01  WS-TOTAL-BONUS-EDIT   PIC Z(10).99.
+       01  WS-BONUS-EDIT         PIC Z(8).99.
+       PROCEDURE DIVISION.
+       BEGIN.
+               EXEC SQL
+                      DECLARE BOS_CUR CURSOR FOR
+                      SELECT EMPLOYEE_NO,
+                             EMPLOYEE_NAME,
+                             EMPLOYEE_BONUS
+                      FROM   BONUS_TABLE2
+               END-EXEC.
+           OPEN OUTPUT REPORT-FILE
+           EXEC SQL
+               OPEN BOS_CUR
+           END-EXEC
+
+           PERFORM UNTIL WS-END-FILE = 'Y'
+              EXEC SQL
+                  FETCH BOS_CUR INTO :WS-BOSNO,
+                                     :WS-BOSNAME,
+                                     :WS-BONUS
+              END-EXEC
+              IF SQLCODE = 0
+                 PERFORM WRITE-DETAIL
+              ELSE
+                 MOVE 'Y' TO WS-END-FILE
+              END-IF
+           END-PERFORM
+
+           PERFORM WRITE-FOOTER
+
+           EXEC SQL
+               CLOSE BOS_CUR
+           END-EXEC
+           CLOSE REPORT-FILE
+           STOP RUN.
+
+       WRITE-DETAIL.
+           IF WS-REC-IN-PAGE = 0
+              PERFORM WRITE-HEADER
+           END-IF
+           MOVE WS-BONUS        TO WS-BONUS-EDIT
+
+           STRING WS-BOSNO DELIMITED BY SIZE
+                  '       ' DELIMITED BY SIZE
+                  wS-BOSNAME DELIMITED BY SIZE
+                  '         ' DELIMITED BY SIZE
+                  WS-BONUS-EDIT DELIMITED BY SIZE
+                  INTO REPORT-REC
+           END-STRING
+           WRITE REPORT-REC
+
+           ADD 1 TO WS-REC-IN-PAGE
+           ADD WS-BONUS TO WS-TOTAL-BONUS
+           ADD WS-BONUS TO WS-PAGE-BONUS
+
+           IF WS-REC-IN-PAGE >= 6
+              PERFORM WRITE-FOOTER
+              MOVE 0 TO WS-REC-IN-PAGE
+              MOVE 0 TO WS-PAGE-BONUS
+           END-IF.
+
+       WRITE-HEADER.
+           ADD 1 TO WS-PAGE-COUNT
+           MOVE '*** BONUS RECORD REPORT ***' TO REPORT-REC
+           WRITE REPORT-REC
+           MOVE SPACES TO REPORT-REC
+           MOVE 'EMPLOYEE_NO EMPLOYEE_NAME        BONUS_AMOUNT'
+                                    to     REPORT-REC
+           WRITE REPORT-REC.
+
+       WRITE-FOOTER.
+           MOVE WS-TOTAL-BONUS   TO WS-TOTAL-BONUS-EDIT
+           STRING 'Page:' WS-PAGE-COUNT DELIMITED BY SIZE
+                ' Records:' WS-REC-IN-PAGE DELIMITED BY SIZE
+                ' TOTAL BONUS:' WS-TOTAL-BONUS-EDIT DELIMITED BY SIZE
+                INTO REPORT-REC
+           END-STRING
+           WRITE REPORT-REC
+           MOVE SPACES TO REPORT-REC
+           WRITE REPORT-REC.
+
+£

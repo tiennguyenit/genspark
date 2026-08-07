@@ -1,0 +1,53 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. FILEPS.                                              00020001
+       ENVIRONMENT DIVISION.                                            00030000
+       INPUT-OUTPUT SECTION.                                            00031001
+       FILE-CONTROL.                                                    00032001
+           SELECT SPORTSP-FILE ASSIGN TO DD1                            00033001
+               ORGANIZATION IS SEQUENTIAL                               00034001
+               ACCESS MODE IS SEQUENTIAL                                00035001
+               FILE STATUS IS WS-FILE-STATUS.                           00036001
+       DATA DIVISION.                                                   00040000
+       FILE SECTION.                                                    00041001
+       FD  SPORTSP-FILE                                                 00042001
+           RECORD CONTAINS 80 CHARACTERS                                00043001
+           DATA RECORD IS SPORTSP-REC.                                  00045001
+       01  SPORTSP-REC.                                                 00047001
+           05 SPORTSP-NAME  PIC X(10).                                  00049001
+           05 FILLER        PIC X(01).                                  00049101
+           05 SPORTSP-INDUSTRY PIC X(10).                               00049202
+           05 FILLER        PIC X(01).                                  00049301
+           05 SPORTSP-LOCATION PIC X(10).                               00049402
+           05 FILLER        PIC X(01).                                  00049502
+           05 SPORTSP-AGE   PIC 9(2).
+           05 FILLER        PIC X(01).                                  00049502
+           05 SPORTSP-FAVCHARAC PIC X(10).
+           05 FILLER        PIC X(34).                                  00049502
+       WORKING-STORAGE SECTION.                                         00050000
+       01  WS-FILE-STATUS   PIC XX.                                     00051001
+       01  WS-EOF           PIC X VALUE 'N'.                            00052001
+      *                                                                 00060000
+       PROCEDURE DIVISION.                                              00170000
+       MAIN-PARA.                                                       00180000
+           OPEN INPUT SPORTSP-FILE                                      00190001
+           IF WS-FILE-STATUS NOT = "00"                                 00200001
+               DISPLAY "ERROR OPENING FILE, STATUS = " WS-FILE-STATUS   00210001
+               STOP RUN                                                 00220001
+           END-IF                                                       00230001
+           PERFORM UNTIL WS-EOF = 'Y'                                   00231001
+               READ SPORTSP-FILE                                        00232001
+                   AT END                                               00233001
+                       MOVE 'Y' TO WS-EOF                               00234001
+                   NOT AT END                                           00235001
+                       DISPLAY "SPORTSP-NAME : " SPORTSP-NAME           00237001
+                       DISPLAY "SPORTSP-INDUSTRY: " SPORTSP-INDUSTRY    00238001
+                       DISPLAY "SPORTSP-LOCATION : " SPORTSP-LOCATION   00239001
+                       DISPLAY "SPORTSP-AGE : " SPORTSP-AGE
+                       DISPLAY "FAV CHRACTER: " SPORTSP-FAVCHARAC
+                       DISPLAY "-----------------------------"          00239101
+               END-READ                                                 00239201
+           END-PERFORM                                                  00239301
+           CLOSE SPORTSP-FILE                                           00239401
+           STOP RUN.                                                    00240000
+
+“

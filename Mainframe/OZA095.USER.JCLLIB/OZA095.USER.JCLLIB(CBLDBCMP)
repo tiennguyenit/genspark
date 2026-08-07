@@ -1,0 +1,26 @@
+//OZA095PL JOB OZA,OZA,MSGLEVEL=(1,1),
+//             CLASS=A,MSGCLASS=A,NOTIFY=&SYSUID,REGION=0M
+//**********************************************************************
+//*** SAMPLE JCL TO PRECOMPILE AND LINK COBOL + DB2 BATCH PROGRAM    ***
+//***      KEEP USERID IN PLACE OF OZA095                            ***
+//*** COPYLIB ===> COPYBOOK                                          ***
+//*** DCLGLIB ===> DB2 DCLGEN LIBRARY                                ***
+//*** DBRMLIB ===> DBRM LIBRARY                                      ***
+//*** LOADLIB ===> LOAD MODULE LIBRARY                               ***
+//*** MEM ===> DBRM MEMBER NAME                                      ***
+//*** LMOD ===> LOAD MODULE NAME                                     ***
+//**********************************************************************
+//JOBPROC  JCLLIB ORDER=OZA095.USER.PROCLIB
+//DB2ICOB  EXEC PRCDBCOB,
+//    COPYLIB='OZA095.USER.COPYLIB',
+//    DCLGLIB='OZA095.USER.DCLGLIB',
+//    DBRMLIB='OZA095.USER.DBRMLIB',
+//    LOADLIB='OZA095.USER.LOADLIB',
+//    MEM=DB2RPT,
+//    LMOD=DB2RPT
+//SYSIN DD  DSN=OZA095.DB2.SOURCE(DB2RPT),DISP=SHR
+//LKED.SYSIN   DD *
+       INCLUDE SYSLIB(DSNELI)
+/*
+//
+G
