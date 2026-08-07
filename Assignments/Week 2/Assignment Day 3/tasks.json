@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Buy groceries",
+        "priority": "high",
+        "estimated_time": 30,
+        "is_complete": false
+    },
+    {
+        "name": "Buy books",
+        "priority": "medium",
+        "estimated_time": 20,
+        "is_complete": false
+    },
+    {
+        "name": "Buy groceries",
+        "priority": "high",
+        "estimated_time": 30,
+        "is_complete": true
+    }
+]
